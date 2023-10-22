@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.14</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.kevinAri</groupId>
+	<artifactId>SpringSoapWeb</artifactId>
+	<version>0.0.1</version>
+	<packaging>war</packaging>
+	<name>SpringSoapWeb</name>
+	<description>${warName}</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>2021.0.8</spring-cloud.version>
+		<warName>${project.name}</warName>
+
+		<!-- generate .xsd from java files -->
+		<classSourcePath>${project.build.sourceDirectory}/com/kevinAri/example/soapStubs/dto</classSourcePath>
+		<namespaceUri>http://www.kevinari.com/soapweb-1</namespaceUri>
+		<xsdFileName>soapweb-1.xsd</xsdFileName>
+	</properties>
+
+	<dependencies>
+		<!-- spring boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+<!--		</dependency>-->
+
+		<!-- soap web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+
+		<!-- database -->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.12</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+	</dependencies>
+
+
+	<build>
+		<finalName>${warName}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- plugin for generate java class from .xsd file and vice versa -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<executions>
+					<!-- generate java class from .xsd file -->
+					<execution>
+						<id>xjc-schema</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/main/resources/xsd/soapweb-2.xsd</source>
+							</sources>
+							<packageName>com.soap.soapWeb2</packageName>
+							<clearOutputDir>false</clearOutputDir>
+						</configuration>
+					</execution>
+
+					<!-- generate .xsd file from java class -->
+					<execution>
+						<id>schemagen-1</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schemagen</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${classSourcePath}</source>
+							</sources>
+							<outputDirectory>${project.build.directory}/classes/xsd</outputDirectory>
+
+							<transformSchemas>
+								<transformSchema>
+									<uri>${namespaceUri}</uri>
+<!--									<toPrefix>custom</toPrefix>-->
+									<toFile>${xsdFileName}</toFile>
+								</transformSchema>
+							</transformSchemas>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

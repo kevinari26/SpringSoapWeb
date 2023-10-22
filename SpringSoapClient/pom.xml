@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.14</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.kevinAri</groupId>
+	<artifactId>SpringSoapClient</artifactId>
+	<version>0.0.1</version>
+	<packaging>war</packaging>
+	<name>SpringSoapClient</name>
+	<description>${warName}</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<warName>${project.name}</warName>
+
+        <!-- untuk plugin generate soap stubs dari wsdl -->
+        <authFile>src/main/resources/authFile.auth</authFile>
+	</properties>
+
+	<dependencies>
+		<!-- spring boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+        <!-- properties -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-spring-boot</artifactId>
+        </dependency>
+
+		<!-- database -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+<!--            <version>23.2.0.0</version>-->
+        </dependency>
+
+
+        <!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+        <!-- wsdl -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+
+        <!-- soap client -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+
+	</dependencies>
+
+
+	<build>
+		<finalName>${warName}</finalName>
+
+		<plugins>
+            <plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+            <!-- soap client -->
+            <!-- plugin for generate java class from .wsdl file or wsdl url -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>1</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <!-- pakai url -->
+                            <wsdlUrls>
+                                <wsdlUrl>${soapWeb1WsdlEndpoint}.wsdl</wsdlUrl>
+                            </wsdlUrls>
+                            <packageName>${soapWeb1PackageName}</packageName>
+
+                            <!-- path auth file tidak boleh mengandung whitespace -->
+                            <xauthFile>${authFile}</xauthFile>
+
+                            <!-- directory file .java hasil generate -->
+                            <sourceDestDir>${project.build.directory}/generated-sources/</sourceDestDir>
+
+                            <!-- directory file .class hasil generate -->
+                            <!--							<destDir>${project.build.directory}/generated-sources/</destDir>-->
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>2</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <!-- pakai file -->
+                            <wsdlFiles>
+                                <wsdlFile>${basedir}${soapWeb2WsdlFile}</wsdlFile>
+                            </wsdlFiles>
+
+                            <keep>true</keep>
+                            <packageName>${soapWeb2PackageName}</packageName>
+
+                            <!-- directory file .java hasil generate -->
+                            <sourceDestDir>${project.build.directory}/generated-sources/</sourceDestDir>
+                            <!--							<sourceDestDir>${basedir}/src/main/generated</sourceDestDir>-->
+
+                            <!-- directory file .class hasil generate -->
+                            <!--							<destDir>${project.build.directory}/generated-sources/</destDir>-->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- plugin import atau export properties pom -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <!-- read dari file properties ke pom -->
+                    <execution>
+                        <id>1</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>src/main/resources/application.yml</file>
+                                <!--								<file>src/main/resources/application.properties</file>-->
+                            </files>
+                            <!--							<urls>-->
+                            <!--								<url></url>-->
+                            <!--							</urls>-->
+                        </configuration>
+
+                    </execution>
+
+                    <!-- write dari pom ke file properties -->
+                    <!--					<execution>-->
+                    <!--						<id>2</id>-->
+                    <!--						<phase>initialize</phase>-->
+                    <!--						<goals>-->
+                    <!--							<goal>write-project-properties</goal>-->
+                    <!--						</goals>-->
+                    <!--						<configuration>-->
+                    <!--&lt;!&ndash;							<outputFile>${project.build.outputDirectory}/properties-from-pom.properties</outputFile>&ndash;&gt;-->
+                    <!--							<outputFile>${project.build.outputDirectory}/application2.yml</outputFile>-->
+                    <!--						</configuration>-->
+                    <!--					</execution>-->
+                </executions>
+            </plugin>
+
+
+		</plugins>
+	</build>
+
+</project>

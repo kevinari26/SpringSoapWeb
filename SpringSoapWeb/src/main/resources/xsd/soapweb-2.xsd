@@ -1,0 +1,42 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.kevinari.com/soapweb-2"
+           targetNamespace="http://www.kevinari.com/soapweb-2"
+           elementFormDefault="qualified">
+
+    <xs:complexType name="ErrorSchemaXsd">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="ErrorCode" type="xs:string"/>
+            <xs:element minOccurs="0" name="ErrorMessage" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Dummy2OutputSchema">
+        <xs:sequence>
+            <xs:element name="requestTime" type="xs:dateTime"/>
+            <xs:element name="responseTime" type="xs:dateTime"/>
+            <xs:element name="stringOutput" type="xs:string"/>
+            <xs:element name="integerOutput" type="xs:int"/>
+            <xs:element name="bigDecimalOutput" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Dummy2Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="requestTime" type="xs:dateTime"/>
+                <xs:element name="stringInput" type="xs:string"/>
+                <xs:element name="integerInput" type="xs:int"/>
+                <xs:element name="bigDecimalInput" type="xs:decimal"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Dummy2Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="errorSchema" type="tns:ErrorSchemaXsd"/>
+                <xs:element minOccurs="0" name="outputSchema" type="tns:Dummy2OutputSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

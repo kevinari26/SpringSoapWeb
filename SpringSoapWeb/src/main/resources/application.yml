@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: SpringDatabaseConnection
+  profiles:
+    active: development
+#  # datasource example
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/db_temp?useSSL=false&serverTimezone=Asia/Jakarta&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root1234
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    show-sql: false
+#    hibernate:
+#      #      Hibernate ddl auto (create, create-drop, validate, update, none)
+#      #      create = drop table, buat baru
+#      #      create-drop = drop tabel, buat baru, drop tabel jika close session
+#      #      validate = validasi db, kalau error langsung stop
+#      #      update = update db kalau ada perubahan
+#      ddl-auto: update
+#
+#
+#  graphql:
+#    path: /graphql-api
+#    schema:
+#      locations: classpath:graphqlFiles
+#    graphiql:
+#      enabled: true
+#      path: /graphql-gui
+
+message-code-wsdl: '{
+    S001: "00|Success",
+    E001: "40|Invalid Request",
+    E002: "41|Internal Server Error",
+    E003: "14|Not Found"
+}'
