@@ -18,6 +18,7 @@ public class WsdlClientProperties {
     private Integer requestTimeout;
 
     private WsdlClientProperty soapWeb1;
+    private WsdlClientProperty soapWeb2;
 
 
     @Setter(AccessLevel.PACKAGE)

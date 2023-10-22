@@ -2,6 +2,7 @@ package com.kevinAri.example.config;
 
 import com.kevinAri.example.config.properties.WsdlClientProperties;
 import com.kevinAri.example.soapClient.SoapWeb1Client;
+import com.kevinAri.example.soapClient.SoapWeb2Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,14 @@ public class SoapClientConfig {
     public SoapWeb1Client soapWeb1Client() {
         SoapWeb1Client client = new SoapWeb1Client();
         buildClient(client, wsdlClientProperties.getSoapWeb1());
+        client.setMessageSender(noAuthMS());
+        return client;
+    }
+
+    @Bean
+    public SoapWeb2Client soapWeb2Client() {
+        SoapWeb2Client client = new SoapWeb2Client();
+        buildClient(client, wsdlClientProperties.getSoapWeb2());
         client.setMessageSender(noAuthMS());
         return client;
     }

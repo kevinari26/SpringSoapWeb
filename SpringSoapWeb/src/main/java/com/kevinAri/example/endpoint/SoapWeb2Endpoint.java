@@ -16,7 +16,7 @@ public class SoapWeb2Endpoint {
     AppService appService;
 
     // soapweb-2
-    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI_2, localPart = "dummy2Request")
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI_2, localPart = "Dummy2Request")
     @ResponsePayload
     public Dummy2Response response(@RequestPayload Dummy2Request request) {
         return appService.response(request);
