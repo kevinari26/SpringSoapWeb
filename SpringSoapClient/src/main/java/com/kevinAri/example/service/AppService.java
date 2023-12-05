@@ -12,7 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import javax.xml.bind.JAXB;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -34,12 +38,11 @@ public class AppService {
 
     public void execute() {
         try {
-//            System.out.println("soap1:");
-//            hitSoapWeb1();
-//            System.out.println("soap2:");
-//            hitSoapWeb2();
+            System.out.println("soap1:");
+            hitSoapWeb1();
+            System.out.println("soap2:");
+            hitSoapWeb2();
             hitSoapWithRawHttp();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,6 +54,11 @@ public class AppService {
         request.setStringInput("str in");
         request.setIntegerInput(1);
         request.setBigDecimalInput(new BigDecimal("2.34"));
+        // print request
+        StringWriter sw = new StringWriter();
+        JAXB.marshal(request, sw);
+        System.out.println(sw.toString());
+        // hit soap
         DummyResponse response = soapWeb1Client.dummyRequest(request);
         System.out.println(objectMapper.writeValueAsString(response));
     }
@@ -64,7 +72,7 @@ public class AppService {
         System.out.println(objectMapper.writeValueAsString(response));
     }
 
-    public void hitSoapWithRawHttp() {
+    private void hitSoapWithRawHttp() {
         String wsURL = "http://localhost:8080/ws";
 
         try {

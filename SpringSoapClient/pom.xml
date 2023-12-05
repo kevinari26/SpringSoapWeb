@@ -139,6 +139,7 @@
                             <packageName>${soapWeb1PackageName}</packageName>
 
                             <!-- path auth file tidak boleh mengandung whitespace -->
+                            <!-- auth example http://user:password@10.87.225.205:8001/ws/endpoint.wsdl-->
                             <xauthFile>${authFile}</xauthFile>
 
                             <!-- directory file .java hasil generate -->
@@ -171,6 +172,7 @@
                             <!--							<destDir>${project.build.directory}/generated-sources/</destDir>-->
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
 
