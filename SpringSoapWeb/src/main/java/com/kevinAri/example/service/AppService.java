@@ -1,6 +1,7 @@
 package com.kevinAri.example.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kevinAri.example.soapStubs.constant.WsConstant2;
 import com.kevinAri.example.soapStubs.dto.forTesting.DummyOutputSchema;
 import com.kevinAri.example.soapStubs.dto.forTesting.DummyRequest;
 import com.kevinAri.example.soapStubs.dto.forTesting.DummyResponse;
@@ -9,13 +10,11 @@ import com.kevinAri.example.soapStubs.dto.queryGeneric.InquiryGenericRequest;
 import com.kevinAri.example.soapStubs.dto.queryGeneric.InquiryGenericResponse;
 import com.kevinAri.example.util.CommonUtil;
 import com.kevinAri.example.util.ResponseHelper;
-import com.soap.soapWeb2.Dummy2OutputSchema;
-import com.soap.soapWeb2.Dummy2Request;
-import com.soap.soapWeb2.Dummy2Response;
-import com.soap.soapWeb2.ErrorSchemaXsd;
+import com.soap.soapWeb2.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -104,6 +103,19 @@ public class AppService {
         }
 
         response.setErrorSchema(errorSchema);
+        return response;
+    }
+
+    public JAXBElement<String> response(JAXBElement<String> request) {
+        JAXBElement<String> response;
+
+        try {
+            response = new JAXBElement<>(WsConstant2.Dummy3Response_QName, String.class, request.getValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = new JAXBElement<>(WsConstant2.Dummy3Response_QName, String.class, "Error");
+        }
+
         return response;
     }
 }

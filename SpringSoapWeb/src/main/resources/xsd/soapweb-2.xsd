@@ -39,4 +39,20 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <!-- dummy 3 -->
+    <xs:element name="Dummy3Request">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
+    <xs:element name="Dummy3Response">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
 </xs:schema>

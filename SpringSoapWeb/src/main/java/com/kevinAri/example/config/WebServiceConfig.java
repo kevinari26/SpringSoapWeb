@@ -1,6 +1,7 @@
 package com.kevinAri.example.config;
 
 import com.kevinAri.example.soapStubs.constant.WsConstant;
+import com.kevinAri.example.soapStubs.constant.WsConstant2;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,6 @@ import org.springframework.xml.xsd.XsdSchema;
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
     public static final String locationUri = "/ws";
-    public static final String NAMESPACE_URI_2 = "http://www.kevinari.com/soapweb-2";
 
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext appContext){
@@ -50,11 +50,12 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("SoapWeb2Port");
         wsdl11Definition.setLocationUri(locationUri);
-        wsdl11Definition.setTargetNamespace(NAMESPACE_URI_2);
+        wsdl11Definition.setTargetNamespace(WsConstant2.NAMESPACE_URI);
         wsdl11Definition.setSchema(soapWeb2Schema);
 
         // suffix request response: opsional
         // harus sama dengan suffix yang didefinisikan pada file .xsd
+        // default value nya Request Response
         // contoh request: dummy2Request
         wsdl11Definition.setRequestSuffix("Request");
         wsdl11Definition.setResponseSuffix("Response");
